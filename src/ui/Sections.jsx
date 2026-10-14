@@ -94,8 +94,8 @@ export default function Sections({ register, entered, project, setProject }) {
           </h2>
           <p className="fade" style={{ '--i': 2 }}>
             I studied Computer Science with a focus on AI at PSCMRCET, Vijayawada. Most of what I know came from
-            shipping projects: a food ordering platform on plain Servlets and JDBC, a Spring Boot API, an AI chatbot.
-            Now I am a software engineer intern at DataIQ Technologies, going deeper into Spring Boot and Hibernate.
+            shipping projects: a multi-restaurant ordering platform on Servlets and JDBC, and an AI chatbot in
+            Flask. I am now a software engineer intern at DataIQ Technologies, working with Spring Boot and Hibernate.
           </p>
           <dl className="facts fade" style={{ '--i': 3 }}>
             <div><dt>Based in</dt><dd>{profile.location}</dd></div>
@@ -124,37 +124,36 @@ export default function Sections({ register, entered, project, setProject }) {
           <h2>
             <Words text="Things I've" from={1} /> <span className="soft"><Words text="built." from={3} /></span>
           </h2>
-          <p className="aside fade" style={{ '--i': 2 }}>Pick one. The monitor opens its source.</p>
-          <ul className="rows">
+          <p className="aside fade" style={{ '--i': 2 }}>Hover or tap a project to open its source on the monitor.</p>
+          <div className="cards">
             {projects.map((p, i) => (
-              <li key={p.name} className="fade" style={{ '--i': 3 + i }}>
-                <button
-                  className={`proj ${project === i ? 'active' : ''}`}
-                  onMouseEnter={() => setProject(i)}
-                  onFocus={() => setProject(i)}
-                  onClick={() => setProject(i)}
-                  aria-expanded={project === i}
-                >
+              <div key={p.name} className="fade" style={{ '--i': 3 + i }}>
+              <article
+                className={`card ${project === i ? 'active' : ''}`}
+                onMouseEnter={() => setProject(i)}
+                onFocus={() => setProject(i)}
+                onClick={() => setProject(i)}
+              >
+                <header>
                   <span className="n">0{i + 1}</span>
-                  <span className="title">
-                    {p.name}
-                    <small>{p.kind}</small>
-                  </span>
-                  <span className="body">
-                    <span className="body-inner">
-                      <span className="text">{p.text}</span>
-                      <span className="tech">{p.tech.join('  /  ')}</span>
-                    </span>
-                  </span>
-                </button>
-                <a className={`repo ${project === i ? 'on' : ''}`} href={p.repo} target="_blank" rel="noreferrer" tabIndex={project === i ? 0 : -1}>
-                  Source <span aria-hidden>↗</span>
+                  <h3>{p.name}</h3>
+                  <p className="kind">{p.kind}</p>
+                </header>
+                <p className="text">{p.text}</p>
+                <ul className="tags">
+                  {p.tech.map((t) => (
+                    <li key={t}>{t}</li>
+                  ))}
+                </ul>
+                <a className="repo" href={p.repo} target="_blank" rel="noreferrer">
+                  View on GitHub <span aria-hidden>↗</span>
                 </a>
-              </li>
+              </article>
+              </div>
             ))}
-          </ul>
-          <a className="link fade" style={{ '--i': 6 }} href={profile.github} target="_blank" rel="noreferrer">
-            All code on GitHub <span aria-hidden>↗</span>
+          </div>
+          <a className="link fade" style={{ '--i': 5 }} href={profile.github} target="_blank" rel="noreferrer">
+            More on GitHub <span aria-hidden>↗</span>
           </a>
         </div>
       </Section>

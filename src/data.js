@@ -25,23 +25,15 @@ export const projects = [
     name: 'Cravings',
     kind: 'Multi-restaurant food ordering',
     text:
-      'Users browse menus from several restaurants, build a cart and place orders. Admins manage restaurants and upload dish images. Plain Servlets and JDBC, organised in a layered DAO architecture.',
+      'Full-stack ordering platform for multiple restaurants. Customers browse menus, manage a cart and place orders; admins manage restaurants and dish images. Built on Servlets and JDBC with a layered DAO design.',
     tech: ['Java', 'JSP', 'Servlets', 'JDBC', 'MySQL', 'HTML/CSS/JS'],
     repo: 'https://github.com/Ibrahimsyed70737/Cravings',
-  },
-  {
-    name: 'Spring CRUD API',
-    kind: 'REST service on Spring Boot',
-    text:
-      'A Spring Boot service with full create, read, update and delete over MySQL through Spring Data JPA. Every endpoint exercised end to end in Postman.',
-    tech: ['Spring Boot', 'Spring Web MVC', 'Spring Data JPA', 'MySQL', 'Postman'],
-    repo: 'https://github.com/Ibrahimsyed70737/SpringBoot',
   },
   {
     name: 'AI Chatbot',
     kind: 'Text and image generation',
     text:
-      'A Flask chat app that replies in text or draws an image, depending on what you ask. It calls OpenAI and Hugging Face models through their APIs.',
+      'Flask web app that answers in text or generates images on request, using OpenAI and Hugging Face models through their APIs. Includes sign-up and login pages.',
     tech: ['Python', 'Flask', 'OpenAI', 'Hugging Face', 'HTML/CSS'],
     repo: 'https://github.com/Ibrahimsyed70737/ai-chat-bot',
   },

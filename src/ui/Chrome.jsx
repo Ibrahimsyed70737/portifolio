@@ -2,21 +2,29 @@ import { useEffect, useState } from 'react'
 import { nav } from '../lib/bus.js'
 
 const LINKS = ['About', 'Work', 'Experience', 'Toolbox', 'Contact']
-const fmt = new Intl.DateTimeFormat('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' })
 
-function useIST() {
-  const [t, setT] = useState(() => fmt.format(new Date()))
+// Bar sits flat at the top, slides away while scrolling down, returns on scroll up.
+function useBarState() {
+  const [state, setState] = useState('at-top')
   useEffect(() => {
-    const id = setInterval(() => setT(fmt.format(new Date())), 15000)
-    return () => clearInterval(id)
+    let last = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      if (y < 40) setState('at-top')
+      else if (y > last + 4) setState('hidden')
+      else if (y < last - 4) setState('shown')
+      last = y
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
-  return t
+  return state
 }
 
 export default function Chrome({ section, entered }) {
-  const time = useIST()
+  const bar = useBarState()
   return (
-    <div className={`chrome ${entered ? 'on' : ''}`}>
+    <div className={`chrome ${entered ? 'on' : ''} ${bar}`}>
       <div className="progress" />
       <header className="top">
         <button className="mark" onClick={() => nav.to(0)} aria-label="Back to top">
@@ -38,10 +46,6 @@ export default function Chrome({ section, entered }) {
           <a className="count" href="mailto:ibrahimibrahim70737@gmail.com">Contact</a>
         </nav>
       </header>
-      <footer className="bottom">
-        <span>Vijayawada, {time} IST</span>
-        <span>{section === 0 ? 'Scroll to explore' : 'Objects on the desk are clickable'}</span>
-      </footer>
     </div>
   )
 }

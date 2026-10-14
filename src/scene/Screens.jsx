@@ -31,33 +31,6 @@ const FILES = [
 }`,
   },
   {
-    folder: 'spring-crud',
-    file: 'ProductController.java',
-    lang: 'Java',
-    code: `@RestController
-@RequestMapping("/api/products")
-public class ProductController {
-
-    @Autowired
-    private ProductRepository repo;
-
-    @GetMapping
-    public List<Product> all() {
-        return repo.findAll();
-    }
-
-    @PostMapping
-    public Product create(@RequestBody Product p) {
-        return repo.save(p);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        repo.deleteById(id);
-    }
-}`,
-  },
-  {
     folder: 'ai-chatbot',
     file: 'app.py',
     lang: 'Python',
@@ -255,9 +228,9 @@ const SCRIPT = [
   { out: 'syed ibrahim khaliulla' },
   { cmd: 'cat stack.txt' },
   { out: 'java  spring-boot  react  mysql  docker' },
-  { cmd: 'mvn spring-boot:run' },
-  { out: '[INFO] Tomcat started on port 8080', ok: true },
-  { out: '[INFO] Started CravingsApplication in 2.41 s', ok: true },
+  { cmd: 'mvn clean package' },
+  { out: '[INFO] Building cravings.war', ok: true },
+  { out: '[INFO] BUILD SUCCESS', ok: true },
   { cmd: 'git push origin main' },
   { out: 'To github.com:Ibrahimsyed70737/cravings.git' },
   { cmd: '' },
