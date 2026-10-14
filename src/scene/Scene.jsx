@@ -1,20 +1,19 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { RoundedBox, Sparkles, useTexture } from '@react-three/drei'
-import { EffectComposer, Bloom, Noise, Vignette, ToneMapping } from '@react-three/postprocessing'
-import { ToneMappingMode } from 'postprocessing'
+import { RoundedBox, useTexture } from '@react-three/drei'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import * as THREE from 'three'
 import CameraRig from './CameraRig.jsx'
 import Hot from './Hot.jsx'
 import { Monitor, Laptop } from './Screens.jsx'
+import { Chair, FloorPlant, WallClock, Headphones, Cube, PencilCup, Rug } from './Models.jsx'
 import * as tex from './textures.js'
 import { nav, scrollState } from '../lib/bus.js'
 import { certifications, experience } from '../data.js'
 
 RectAreaLightUniformsLib.init()
 
-const METAL = { color: '#1d1c1e', metalness: 0.65, roughness: 0.35 }
+const METAL = { color: '#2a2a2c', metalness: 0.6, roughness: 0.38 }
 
 function Segment({ a, b, r = 0.011 }) {
   const { pos, quat, len } = useMemo(() => {
@@ -38,16 +37,16 @@ function Room() {
   const poster = useMemo(() => tex.posterTexture(), [])
   const area = useRef()
   useLayoutEffect(() => area.current.lookAt(-0.4, 0, 0.6), [])
-  const frame = '#14100d'
+  const frame = '#f7f4ee'
   return (
     <group>
       <mesh rotation-x={-Math.PI / 2} position-y={-0.76} receiveShadow>
         <planeGeometry args={[16, 16]} />
-        <meshStandardMaterial color="#17120e" roughness={0.95} />
+        <meshStandardMaterial color="#c9b08e" roughness={0.75} />
       </mesh>
       <mesh position={[0, 1.1, -1.15]} receiveShadow>
         <planeGeometry args={[10, 4]} />
-        <meshStandardMaterial color="#2d2520" roughness={0.95} />
+        <meshStandardMaterial color="#ebe5db" roughness={0.95} />
       </mesh>
       <group position={[-1.05, 1.12, -1.145]}>
         <mesh position-z={0.001}>
@@ -69,10 +68,10 @@ function Room() {
         ))}
         <mesh position={[0, -0.52, 0.05]} castShadow receiveShadow>
           <boxGeometry args={[1.36, 0.025, 0.11]} />
-          <meshStandardMaterial color="#3a2c22" roughness={0.8} />
+          <meshStandardMaterial color="#efe9df" roughness={0.8} />
         </mesh>
       </group>
-      <rectAreaLight ref={area} position={[-1.05, 1.12, -1.1]} width={1.2} height={0.96} intensity={2.2} color="#8b9cf0" />
+      <rectAreaLight ref={area} position={[-1.05, 1.12, -1.1]} width={1.2} height={0.96} intensity={4} color="#fff3df" />
       <mesh position={[0.02, 1.48, -1.148]}>
         <planeGeometry args={[0.42, 0.574]} />
         <meshStandardMaterial map={poster} roughness={0.85} />
@@ -101,7 +100,7 @@ function Desk() {
       ))}
       {/* felt desk mat */}
       <RoundedBox args={[0.92, 0.004, 0.37]} radius={0.002} position={[0.25, 0.002, 0.15]} receiveShadow>
-        <meshStandardMaterial color="#24201c" roughness={1} />
+        <meshStandardMaterial color="#3d3a37" roughness={1} />
       </RoundedBox>
     </group>
   )
@@ -152,11 +151,11 @@ const L2 = [-1.03, 0.7, -0.26]
 const LT = [-0.72, 0, 0.08]
 
 function Lamp() {
-  const [on, setOn] = useState(true)
+  const [on, setOn] = useState(false)
   const head = useRef()
   const light = useRef()
   const bulb = useRef()
-  const level = useRef(1)
+  const level = useRef(0)
   const target = useMemo(() => {
     const o = new THREE.Object3D()
     o.position.set(...LT)
@@ -190,7 +189,7 @@ function Lamp() {
           </mesh>
           <mesh position-z={0.06}>
             <sphereGeometry args={[0.03, 20, 16]} />
-            <meshStandardMaterial ref={bulb} color="#fff1d6" emissive="#ffcf8a" emissiveIntensity={7} toneMapped={false} />
+            <meshStandardMaterial ref={bulb} color="#fff1d6" emissive="#ffcf8a" emissiveIntensity={0.2} toneMapped={false} />
           </mesh>
         </group>
       </Hot>
@@ -204,14 +203,7 @@ function Lamp() {
         distance={4}
         decay={1.5}
         color="#ffb468"
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-bias={-0.0004}
-        shadow-camera-near={0.05}
       />
-      {on && (
-        <Sparkles count={46} scale={[0.9, 0.6, 0.9]} position={[-0.78, 0.35, 0.0]} size={1.4} speed={0.18} opacity={0.45} color="#ffd8a6" />
-      )}
     </group>
   )
 }
@@ -470,7 +462,7 @@ function Shelf() {
     <group position={[1.05, 0.98, -1.02]}>
       <Hot label="toolbox" onClick={() => nav.to(4)} lift={0.006}>
         <RoundedBox args={[1.4, 0.03, 0.24]} radius={0.006} castShadow receiveShadow>
-          <meshStandardMaterial color="#563a27" roughness={0.6} />
+          <meshStandardMaterial color="#8a6447" roughness={0.6} />
         </RoundedBox>
         {[-0.55, 0.55].map((bx) => (
           <mesh key={bx} position={[bx, -0.07, -0.1]} castShadow>
@@ -519,17 +511,6 @@ function Shelf() {
   )
 }
 
-function Effects() {
-  return (
-    <EffectComposer multisampling={4} disableNormalPass>
-      <Bloom mipmapBlur intensity={0.65} luminanceThreshold={0.9} luminanceSmoothing={0.2} />
-      <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
-      <Noise opacity={0.035} premultiply />
-      <Vignette offset={0.28} darkness={0.72} />
-    </EffectComposer>
-  )
-}
-
 export default function Scene({ project, started, onReady }) {
   useEffect(() => {
     onReady?.()
@@ -537,14 +518,14 @@ export default function Scene({ project, started, onReady }) {
 
   return (
     <>
-      <color attach="background" args={['#0e0c0a']} />
-      <fog attach="fog" args={['#0e0c0a', 6, 15]} />
-      <ambientLight intensity={0.4} color="#ffe2c4" />
-      <hemisphereLight args={['#6a78a0', '#2a1c12', 0.75]} />
+      <color attach="background" args={['#ebe5db']} />
+      <fog attach="fog" args={['#ebe5db', 7, 16]} />
+      <ambientLight intensity={0.55} color="#fff8ef" />
+      <hemisphereLight args={['#e4eeff', '#c9b08e', 1.0]} />
       <directionalLight
-        position={[2.6, 4, 3]}
-        intensity={1.1}
-        color="#ffe6cc"
+        position={[-2.2, 4.2, 2.8]}
+        intensity={2.4}
+        color="#fff1dc"
         castShadow
         shadow-mapSize={[2048, 2048]}
         shadow-camera-left={-2.6}
@@ -569,7 +550,13 @@ export default function Scene({ project, started, onReady }) {
       <Books />
       <Plant />
       <Shelf />
-      <Effects />
+      <Chair />
+      <FloorPlant />
+      <WallClock />
+      <Headphones />
+      <Cube />
+      <PencilCup />
+      <Rug />
     </>
   )
 }

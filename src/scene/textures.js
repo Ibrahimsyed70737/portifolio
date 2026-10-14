@@ -40,14 +40,14 @@ function wrap(g, text, x, y, maxW, lh) {
 export function woodTexture() {
   const [c, g] = makeCanvas(2048, 1024)
   const r = rand(7)
-  g.fillStyle = '#6a4630'
+  g.fillStyle = '#c0946a'
   g.fillRect(0, 0, 2048, 1024)
   for (let i = 0; i < 420; i++) {
     const y = r() * 1024
     const amp = 3 + r() * 10
     const freq = 0.002 + r() * 0.006
     const ph = r() * 10
-    g.strokeStyle = r() > 0.45 ? `rgba(38,22,12,${0.06 + r() * 0.16})` : `rgba(170,124,84,${0.04 + r() * 0.1})`
+    g.strokeStyle = r() > 0.45 ? `rgba(110,68,36,${0.05 + r() * 0.13})` : `rgba(232,196,156,${0.05 + r() * 0.12})`
     g.lineWidth = 0.8 + r() * 3
     g.beginPath()
     for (let x = 0; x <= 2048; x += 24) {
@@ -61,7 +61,7 @@ export function woodTexture() {
     const kx = 300 + r() * 1500
     const ky = 150 + r() * 700
     for (let ring = 0; ring < 7; ring++) {
-      g.strokeStyle = `rgba(40,22,12,${0.18 - ring * 0.02})`
+      g.strokeStyle = `rgba(110,68,36,${0.16 - ring * 0.02})`
       g.lineWidth = 2
       g.beginPath()
       g.ellipse(kx, ky, 10 + ring * 9, 4 + ring * 3.2, 0, 0, Math.PI * 2)
@@ -75,57 +75,71 @@ export function windowTexture() {
   const [c, g] = makeCanvas(640, 512)
   const r = rand(3)
   const sky = g.createLinearGradient(0, 0, 0, 512)
-  sky.addColorStop(0, '#0d1430')
-  sky.addColorStop(0.42, '#262a52')
-  sky.addColorStop(0.72, '#7d4558')
-  sky.addColorStop(1, '#e0874f')
+  sky.addColorStop(0, '#8fbde6')
+  sky.addColorStop(0.55, '#c9e0f0')
+  sky.addColorStop(1, '#f4ecdf')
   g.fillStyle = sky
   g.fillRect(0, 0, 640, 512)
-  for (let i = 0; i < 90; i++) {
-    g.fillStyle = `rgba(255,248,230,${0.15 + r() * 0.55})`
-    const s = r() > 0.92 ? 2.2 : 1.3
-    g.fillRect(r() * 640, r() * 230, s, s)
+  // sun haze
+  const sun = g.createRadialGradient(150, 90, 5, 150, 90, 220)
+  sun.addColorStop(0, 'rgba(255,250,235,0.95)')
+  sun.addColorStop(0.15, 'rgba(255,245,220,0.6)')
+  sun.addColorStop(1, 'rgba(255,245,220,0)')
+  g.fillStyle = sun
+  g.fillRect(0, 0, 640, 512)
+  // soft clouds
+  for (let k = 0; k < 7; k++) {
+    const cx = r() * 640
+    const cy = 40 + r() * 150
+    for (let j = 0; j < 9; j++) {
+      const x = cx + (r() - 0.5) * 120
+      const y = cy + (r() - 0.5) * 22
+      const rad = 18 + r() * 30
+      const cl = g.createRadialGradient(x, y, 0, x, y, rad)
+      cl.addColorStop(0, 'rgba(255,255,255,0.55)')
+      cl.addColorStop(1, 'rgba(255,255,255,0)')
+      g.fillStyle = cl
+      g.fillRect(x - rad, y - rad, rad * 2, rad * 2)
+    }
   }
-  // moon with a soft halo
-  const halo = g.createRadialGradient(470, 100, 10, 470, 100, 80)
-  halo.addColorStop(0, 'rgba(255,236,200,0.35)')
-  halo.addColorStop(1, 'rgba(255,236,200,0)')
-  g.fillStyle = halo
-  g.fillRect(380, 10, 180, 180)
-  g.fillStyle = '#f4e7c9'
-  g.beginPath()
-  g.arc(470, 100, 20, 0, Math.PI * 2)
-  g.fill()
-  // far skyline
+  // far skyline, hazy
   let x = -5
   while (x < 640) {
     const w = 18 + r() * 42
     const h = 90 + r() * 150
-    g.fillStyle = '#1d1728'
+    g.fillStyle = '#b8c6d3'
     g.fillRect(x, 512 - h, w, h)
-    x += w + 1
+    x += w + 2
   }
-  // near skyline with lit windows
+  // near skyline with glass windows
   x = -10
   while (x < 640) {
     const w = 34 + r() * 66
     const h = 50 + r() * 120
-    g.fillStyle = '#0b090e'
+    g.fillStyle = r() > 0.5 ? '#e8dfd2' : '#d2c8bb'
     g.fillRect(x, 512 - h, w, h)
     for (let wy = 512 - h + 9; wy < 505; wy += 11)
-      for (let wx = x + 6; wx < x + w - 7; wx += 9)
-        if (r() > 0.74) {
-          g.fillStyle = r() > 0.25 ? 'rgba(255,190,110,0.95)' : 'rgba(170,205,255,0.8)'
-          g.fillRect(wx, wy, 4, 5)
-        }
+      for (let wx = x + 6; wx < x + w - 7; wx += 9) {
+        g.fillStyle = r() > 0.85 ? 'rgba(255,255,255,0.9)' : 'rgba(120,150,180,0.55)'
+        g.fillRect(wx, wy, 4, 6)
+      }
     x += w + 3
+  }
+  // trees along the bottom
+  for (let i = 0; i < 26; i++) {
+    const tx = r() * 640
+    const rad = 16 + r() * 22
+    g.fillStyle = r() > 0.5 ? '#6f8f5c' : '#5c7d4c'
+    g.beginPath()
+    g.arc(tx, 512 - rad * 0.4, rad, 0, Math.PI * 2)
+    g.fill()
   }
   return toTexture(c)
 }
 
 export function posterTexture() {
   const [c, g] = makeCanvas(600, 820)
-  g.fillStyle = '#dccfb9'
+  g.fillStyle = '#f1ebe0'
   g.fillRect(0, 0, 600, 820)
   // paper grain
   const r = rand(11)
@@ -133,17 +147,17 @@ export function posterTexture() {
     g.fillStyle = `rgba(80,60,40,${r() * 0.06})`
     g.fillRect(r() * 600, r() * 820, 1.5, 1.5)
   }
-  g.fillStyle = '#c4653e'
+  g.fillStyle = '#c4511a'
   g.beginPath()
   g.arc(470, 150, 70, 0, Math.PI * 2)
   g.fill()
   g.fillStyle = '#231b16'
-  g.font = 'italic 300 84px Fraunces'
+  g.font = '300 84px Inter'
   g.fillText('make it', 56, 380)
   g.fillText('work,', 56, 462)
-  g.font = '400 84px Fraunces'
+  g.font = '400 84px Inter'
   g.fillText('right,', 56, 560)
-  g.font = '600 84px Fraunces'
+  g.font = '700 84px Inter'
   g.fillText('fast.', 56, 658)
   g.font = '400 20px "JetBrains Mono"'
   g.fillStyle = '#5b4d40'
@@ -166,9 +180,9 @@ export function certTexture(title, issuer) {
   g.textAlign = 'center'
   g.fillText('C E R T I F I C A T E', 256, 78)
   g.fillStyle = '#2a211a'
-  g.font = '400 38px Fraunces'
+  g.font = '600 34px Inter'
   const end = wrap(g, title, 256, 150, 400, 44)
-  g.font = 'italic 400 24px Fraunces'
+  g.font = '400 22px Inter'
   g.fillStyle = '#5b4d40'
   g.fillText('awarded to Syed Ibrahim Khaliulla', 256, end + 52)
   g.font = '500 20px "JetBrains Mono"'
@@ -264,9 +278,9 @@ export function phoneTexture() {
   const date = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Asia/Kolkata' })
   g.textAlign = 'center'
   g.fillStyle = '#efe6d8'
-  g.font = '300 104px Fraunces'
+  g.font = '200 100px Inter'
   g.fillText(time, 180, 190)
-  g.font = '400 20px "Instrument Sans"'
+  g.font = '400 20px Inter'
   g.fillStyle = '#c9bdad'
   g.fillText(date, 180, 228)
   // notification card
@@ -282,10 +296,10 @@ export function phoneTexture() {
   g.font = '500 15px "JetBrains Mono"'
   g.fillStyle = '#b6aa9a'
   g.fillText('MESSAGES · now', 86, 343)
-  g.font = '600 21px "Instrument Sans"'
+  g.font = '600 21px Inter'
   g.fillStyle = '#efe6d8'
   g.fillText('You?', 40, 385)
-  g.font = '400 19px "Instrument Sans"'
+  g.font = '400 19px Inter'
   g.fillStyle = '#d7cdbf'
   g.fillText('Hey Ibrahim, got a minute to talk?', 40, 412)
   g.textAlign = 'center'

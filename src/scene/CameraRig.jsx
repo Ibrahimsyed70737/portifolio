@@ -10,7 +10,7 @@ export const KEYS = [
   { pos: [0.55, 0.3, 0.94], look: [1.1, 0.14, -0.3], side: 'left' }, // about: photo frame
   { pos: [0.15, 0.52, 1.4], look: [0.15, 0.4, -0.42], side: 'left' }, // work: monitor
   { pos: [-0.36, 1.05, 0.95], look: [-0.42, 0.0, 0.42], side: 'right' }, // experience: notebook
-  { pos: [0.95, 1.15, 0.45], look: [1.08, 1.04, -1.05], side: 'left' }, // toolbox: shelf
+  { pos: [0.95, 1.3, 0.55], look: [1.1, 1.22, -1.05], side: 'left' }, // toolbox: shelf
   { pos: [1.0, 0.56, 0.86], look: [0.84, 0.0, 0.46], side: 'left' }, // contact: phone
 ]
 export const SIDES = KEYS.map((k) => k.side)

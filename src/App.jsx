@@ -1,5 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { PerformanceMonitor } from '@react-three/drei'
+import * as THREE from 'three'
 import Lenis from 'lenis'
 import Scene from './scene/Scene.jsx'
 import { SIDES } from './scene/CameraRig.jsx'
@@ -10,7 +12,7 @@ import CursorLabel from './ui/CursorLabel.jsx'
 import { nav, scrollState } from './lib/bus.js'
 
 // Canvas textures draw text, so these fonts must be ready before the scene mounts.
-const FONTS = ['600 48px Caveat', '400 20px "JetBrains Mono"', 'italic 300 60px Fraunces', '400 60px Fraunces', '400 20px "Instrument Sans"']
+const FONTS = ['600 48px Caveat', '400 20px "JetBrains Mono"', '200 60px Inter', '300 60px Inter', '400 20px Inter', '600 20px Inter', '700 60px Inter']
 
 // ?shot=3 jumps straight to a section (handy for screenshots).
 const SHOT = new URLSearchParams(location.search).get('shot')
@@ -21,6 +23,7 @@ export default function App() {
   const [entered, setEntered] = useState(false)
   const [project, setProject] = useState(0)
   const [section, setSection] = useState(0)
+  const [dpr, setDpr] = useState(1.5)
   const sections = useRef([])
   const lenisRef = useRef()
 
@@ -102,10 +105,12 @@ export default function App() {
         {fontsReady && (
           <Canvas
             shadows
-            dpr={[1, 1.75]}
+            dpr={dpr}
             camera={{ fov: 35, near: 0.03, far: 40, position: [5.6, 3.6, 7.2] }}
-            gl={{ antialias: false, powerPreference: 'high-performance' }}
+            gl={{ antialias: true, powerPreference: 'high-performance', toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.05 }}
           >
+            {/* drop resolution on slower GPUs instead of dropping frames */}
+            <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(Math.min(1.5, window.devicePixelRatio))} />
             <Suspense fallback={null}>
               <Scene project={project} started={entered} onReady={() => setSceneReady(true)} />
             </Suspense>

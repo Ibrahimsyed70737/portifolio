@@ -72,16 +72,16 @@ export default function Sections({ register, entered, project, setProject }) {
           <h1>
             <Words text={profile.first} from={2} />
             <br />
-            <em>
+            <span className="soft">
               <Words text={profile.last} from={4} />
-            </em>
+            </span>
           </h1>
           <p className="lede fade" style={{ '--i': 6 }}>
             I build full-stack web apps, Java on the back and React on the front. This is my desk. Scroll to look
             around, or click anything on it.
           </p>
           <p className="hint fade" style={{ '--i': 8 }}>
-            <span className="dot" /> the lamp has a switch
+            <span className="dot" /> Tip: click the desk lamp
           </p>
         </div>
       </Section>
@@ -90,7 +90,7 @@ export default function Sections({ register, entered, project, setProject }) {
         <div className="panel">
           <Eyebrow n="01">About</Eyebrow>
           <h2>
-            <Words text="Learning by" from={1} /> <em><Words text="building things." from={3} /></em>
+            <Words text="Learning by" from={1} /> <span className="soft"><Words text="building things." from={3} /></span>
           </h2>
           <p className="fade" style={{ '--i': 2 }}>
             I studied Computer Science with a focus on AI at PSCMRCET, Vijayawada. Most of what I know came from
@@ -122,7 +122,7 @@ export default function Sections({ register, entered, project, setProject }) {
         <div className="panel">
           <Eyebrow n="02">Work</Eyebrow>
           <h2>
-            <Words text="Things I've" from={1} /> <em><Words text="built." from={3} /></em>
+            <Words text="Things I've" from={1} /> <span className="soft"><Words text="built." from={3} /></span>
           </h2>
           <p className="aside fade" style={{ '--i': 2 }}>Pick one. The monitor opens its source.</p>
           <ul className="rows">
@@ -163,7 +163,7 @@ export default function Sections({ register, entered, project, setProject }) {
         <div className="panel">
           <Eyebrow n="03">Experience</Eyebrow>
           <h2>
-            <Words text="Where I've" from={1} /> <em><Words text="worked." from={3} /></em>
+            <Words text="Where I've" from={1} /> <span className="soft"><Words text="worked." from={3} /></span>
           </h2>
           <ol className="jobs">
             {experience.map((j, i) => (
@@ -182,7 +182,7 @@ export default function Sections({ register, entered, project, setProject }) {
         <div className="panel">
           <Eyebrow n="04">Toolbox</Eyebrow>
           <h2>
-            <Words text="What I" from={1} /> <em><Words text="work with." from={3} /></em>
+            <Words text="What I" from={1} /> <span className="soft"><Words text="work with." from={3} /></span>
           </h2>
           <dl className="tools">
             {toolbox.map((t, i) => (
@@ -207,7 +207,7 @@ export default function Sections({ register, entered, project, setProject }) {
         <div className="panel">
           <Eyebrow n="05">Contact</Eyebrow>
           <h2>
-            <Words text="Have a role or" from={1} /> <em><Words text="a project?" from={4} /></em>
+            <Words text="Have a role or" from={1} /> <span className="soft"><Words text="a project?" from={4} /></span>
           </h2>
           <p className="fade" style={{ '--i': 2 }}>
             I'm open to software engineering roles. Mail is fastest, and I usually reply the same day.
@@ -225,7 +225,7 @@ export default function Sections({ register, entered, project, setProject }) {
             <li><a href={profile.github} target="_blank" rel="noreferrer">GitHub <span>{profile.githubLabel}</span></a></li>
           </ul>
           <p className="foot fade" style={{ '--i': 6 }}>
-            © 2026 Syed Ibrahim Khaliulla. Desk modelled by hand in three.js.
+            © 2026 Syed Ibrahim Khaliulla. Built with React and three.js.
           </p>
         </div>
       </Section>

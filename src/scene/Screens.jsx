@@ -204,12 +204,15 @@ export function Monitor({ project }) {
   useFrame(() => {
     const s = st.current
     const now = performance.now()
+    // canvas uploads are the costly part: cap redraws at ~20 per second
+    if (now - (s.drawn || 0) < 50) return
     const total = FILES[s.project].code.length
     const typed = Math.min(total, Math.floor(((now - s.start) / 1000) * 340))
     const blink = Math.floor(now / 530) % 2 === 0
     if (typed !== s.typed || blink !== s.blink) {
       s.typed = typed
       s.blink = blink
+      s.drawn = now
       drawEditor(g, s.project, typed, blink)
       texture.needsUpdate = true
     }
@@ -316,6 +319,8 @@ export function Laptop() {
   useFrame(() => {
     const s = st.current
     const now = performance.now()
+    if (now - (s.drawn || 0) < 60) return
+    s.drawn = now
     const t = (now - s.start) / 1000
     let budget = Math.floor(t * 14)
     if (budget > SCRIPT_COST + 50) {
